@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'http';
 import { Session } from './types/oidc.types';
 import * as oidc from 'oidc-provider';
+import Provider from "oidc-provider";
 
 @Injectable()
 export class OidcService {
-  constructor(public readonly provider: oidc.Provider) {}
+  constructor(public readonly provider: Provider) {}
 
   getContext(req: IncomingMessage, res: ServerResponse) {
     const ctx = this.provider.app.createContext(

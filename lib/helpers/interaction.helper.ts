@@ -1,8 +1,9 @@
 import * as oidc from 'oidc-provider';
 import { InteractionDetails } from '../types/oidc.types';
+import Provider from "oidc-provider";
 
 export class InteractionHelper {
-  private readonly provider: oidc.Provider;
+  private readonly provider: Provider;
 
   constructor(private readonly ctx: oidc.KoaContextWithOIDC) {
     const { oidc } = ctx;

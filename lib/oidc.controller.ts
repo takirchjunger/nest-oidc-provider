@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
-import { Provider } from 'oidc-provider';
+import Provider from 'oidc-provider';
 import { PATH_METADATA, VERSION_METADATA } from '@nestjs/common/constants';
 
 @Controller()

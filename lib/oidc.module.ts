@@ -3,7 +3,7 @@ import {
   DynamicModule,
   Global,
   Module,
-  Provider,
+  Provider as NestProvider,
   Type,
 } from '@nestjs/common';
 import {
@@ -15,7 +15,7 @@ import { OIDC_MODULE_OPTIONS } from './oidc.constants';
 import { OidcController } from './oidc.controller';
 import { OidcService } from './oidc.service';
 import { validatePath } from './common/oidc.utils';
-import * as oidc from 'oidc-provider';
+import Provider from "oidc-provider";
 
 @Global()
 @Module({
@@ -53,9 +53,9 @@ export class OidcModule {
     };
   }
 
-  private static createOidcProvider(): Provider {
+  private static createOidcProvider(): NestProvider {
     return {
-      provide: oidc.Provider,
+      provide: Provider,
       useFactory: async (moduleOptions: OidcModuleOptions): Promise<any> => {
         // Change controller path manually until Nest doesn't provide an official way for this
         // (see https://github.com/nestjs/nest/issues/1438)
@@ -66,7 +66,7 @@ export class OidcModule {
 
         const providerFactory =
           moduleOptions.factory ||
-          ((issuer, config) => new oidc.Provider(issuer, config));
+          ((issuer, config) => new Provider(issuer, config));
 
         const provider = await Promise.resolve(
           providerFactory(moduleOptions.issuer, moduleOptions.oidc),
@@ -84,7 +84,7 @@ export class OidcModule {
 
   private static createAsyncProviders(
     options: OidcModuleAsyncOptions,
-  ): Provider[] {
+  ): NestProvider[] {
     if (options.useExisting || options.useFactory) {
       return [this.createAsyncOptionsProvider(options)];
     }
@@ -102,7 +102,7 @@ export class OidcModule {
 
   private static createAsyncOptionsProvider(
     options: OidcModuleAsyncOptions,
-  ): Provider {
+  ): NestProvider {
     if (options.useFactory) {
       return {
         provide: OIDC_MODULE_OPTIONS,
